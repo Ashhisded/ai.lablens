@@ -1,0 +1,8 @@
+# Runtime dependencies — pinned for reproducibility
+fastapi==0.115.5          # Web framework
+uvicorn[standard]==0.32.1 # ASGI server
+jinja2==3.1.4             # HTML templating
+pydantic==2.10.3          # Data validation
+pydantic-settings==2.6.1  # Settings from environment variables
+google-genai==1.14.0      # Official Google Generative AI SDK
+python-multipart==0.0.20  # Required by FastAPI for form data parsing

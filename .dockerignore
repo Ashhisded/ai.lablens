@@ -1,0 +1,35 @@
+# Git history
+.git/
+.gitignore
+
+# Virtual environments
+.venv/
+venv/
+
+# Dev / test artifacts
+tests/
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Secrets
+.env
+*.env.local
+
+# Dev dependencies
+requirements-dev.txt
+
+# Docs (not needed at runtime)
+README.md
+DEPLOY.md
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Python cache
+__pycache__/
+*.py[cod]

@@ -1,0 +1,7 @@
+# Development-only dependencies — NOT installed in Docker image
+pytest==8.3.4             # Test framework
+pytest-cov==6.0.0         # Coverage plugin
+pytest-asyncio==0.24.0    # Async test support
+httpx==0.28.1             # HTTPX for FastAPI TestClient
+ruff==0.8.6               # Linter and formatter
+beautifulsoup4==4.12.3    # HTML parsing for accessibility smoke tests
