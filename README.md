@@ -213,7 +213,7 @@ docker run -p 8080:8080 -e GEMINI_API_KEY=your-key-here lablens
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `GEMINI_API_KEY` | No* | — | Google Gemini API key. App works without it (fallback mode). |
-| `GEMINI_MODEL` | No | `gemini-2.0-flash` | Gemini model name |
+| `GEMINI_MODEL` | No | `gemini-3.5-flash` | Gemini model name |
 | `APP_ENV` | No | `development` | Set to `production` to disable /docs |
 | `CORS_ORIGINS` | No | (same-origin) | Comma-separated allowed origins |
 | `RATE_LIMIT_RPM` | No | `20` | Requests per minute per IP |

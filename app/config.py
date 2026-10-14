@@ -17,7 +17,7 @@ class Settings:
         """Load settings from environment."""
         self.gemini_api_key: str | None = os.environ.get("GEMINI_API_KEY")
         # Default to a current, fast Gemini Flash model.
-        self.gemini_model: str = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
+        self.gemini_model: str = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash")
         self.app_env: str = os.environ.get("APP_ENV", "development")
         self.cors_origins: list[str] = self._parse_cors_origins(
             os.environ.get("CORS_ORIGINS", "")

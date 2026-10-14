@@ -77,7 +77,7 @@ gcloud run deploy ${SERVICE_NAME} \
     --region ${REGION} \
     --allow-unauthenticated \
     --set-secrets="GEMINI_API_KEY=gemini-api-key:latest" \
-    --set-env-vars="APP_ENV=production,GEMINI_MODEL=gemini-2.0-flash,RATE_LIMIT_RPM=20" \
+    --set-env-vars="APP_ENV=production,GEMINI_MODEL=gemini-3.5-flash,RATE_LIMIT_RPM=20" \
     --cpu=1 \
     --memory=512Mi \
     --concurrency=80 \
