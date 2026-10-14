@@ -1,0 +1,270 @@
+{
+  "version": "1.0.0",
+  "source": "MedlinePlus (medlineplus.gov) and Mayo Clinic Laboratories (mayocliniclabs.com)",
+  "last_reviewed": "2024-01-01",
+  "disclaimer": "Reference ranges are general adult values. Individual laboratory reference intervals may differ based on equipment, methodology, and population. These ranges are provided for educational purposes only.",
+  "tests": [
+    {
+      "id": "hemoglobin",
+      "display_name": "Hemoglobin",
+      "unit": "g/dL",
+      "plain_description": "Hemoglobin is the protein in red blood cells that carries oxygen around your body.",
+      "max_plausible": 25.0,
+      "ranges": {
+        "male": {
+          "low": 13.5,
+          "high": 17.5,
+          "critical_low": 7.0,
+          "critical_high": 20.0
+        },
+        "female": {
+          "low": 12.0,
+          "high": 15.5,
+          "critical_low": 7.0,
+          "critical_high": 20.0
+        }
+      },
+      "fallback_low": "A hemoglobin level below the typical range can be associated with anemia, which may cause fatigue or weakness. Many factors can affect hemoglobin. Please discuss this result with your doctor.",
+      "fallback_high": "A hemoglobin level above the typical range can be associated with dehydration or other conditions. Please discuss this result with your doctor."
+    },
+    {
+      "id": "wbc",
+      "display_name": "White Blood Cell Count",
+      "unit": "10\u00b3/\u00b5L",
+      "plain_description": "White blood cells are part of your immune system and help your body fight infections.",
+      "max_plausible": 100.0,
+      "ranges": {
+        "all": {
+          "low": 4.5,
+          "high": 11.0,
+          "critical_low": 2.0,
+          "critical_high": 30.0
+        }
+      },
+      "fallback_low": "A white blood cell count below the typical range can be associated with reduced infection-fighting ability. Please discuss this result with your doctor.",
+      "fallback_high": "A white blood cell count above the typical range can be associated with infection or inflammation. Please discuss this result with your doctor."
+    },
+    {
+      "id": "platelets",
+      "display_name": "Platelet Count",
+      "unit": "10\u00b3/\u00b5L",
+      "plain_description": "Platelets are tiny blood cells that help your blood clot when you are injured.",
+      "max_plausible": 1500.0,
+      "ranges": {
+        "all": {
+          "low": 150.0,
+          "high": 450.0,
+          "critical_low": 50.0,
+          "critical_high": 1000.0
+        }
+      },
+      "fallback_low": "A platelet count below the typical range can be associated with an increased risk of bruising or bleeding. Please discuss this result with your doctor.",
+      "fallback_high": "A platelet count above the typical range can be associated with clotting concerns. Please discuss this result with your doctor."
+    },
+    {
+      "id": "fasting_glucose",
+      "display_name": "Fasting Glucose",
+      "unit": "mg/dL",
+      "plain_description": "Fasting glucose measures the amount of sugar in your blood after not eating for at least 8 hours.",
+      "max_plausible": 1000.0,
+      "ranges": {
+        "all": {
+          "low": 70.0,
+          "high": 99.0,
+          "critical_low": 40.0,
+          "critical_high": 500.0
+        }
+      },
+      "fallback_low": "A fasting glucose level below the typical range may indicate low blood sugar. Please discuss this result with your doctor.",
+      "fallback_high": "A fasting glucose level above the typical range can be associated with prediabetes or blood sugar regulation concerns. Please discuss this result with your doctor."
+    },
+    {
+      "id": "hba1c",
+      "display_name": "HbA1c",
+      "unit": "%",
+      "plain_description": "HbA1c reflects your average blood sugar level over the past 2-3 months and is used to monitor blood sugar control.",
+      "max_plausible": 20.0,
+      "ranges": {
+        "all": {
+          "low": null,
+          "high": 5.6,
+          "critical_low": null,
+          "critical_high": 15.0
+        }
+      },
+      "fallback_low": null,
+      "fallback_high": "An HbA1c above the typical range can be associated with elevated average blood sugar. Please discuss this result with your doctor."
+    },
+    {
+      "id": "total_cholesterol",
+      "display_name": "Total Cholesterol",
+      "unit": "mg/dL",
+      "plain_description": "Total cholesterol measures the overall amount of cholesterol in your blood, which can affect heart health.",
+      "max_plausible": 1000.0,
+      "ranges": {
+        "all": {
+          "low": null,
+          "high": 199.0,
+          "critical_low": null,
+          "critical_high": 500.0
+        }
+      },
+      "fallback_low": null,
+      "fallback_high": "A total cholesterol level above the typical range can be associated with an increased risk of cardiovascular concerns. Please discuss this result with your doctor."
+    },
+    {
+      "id": "ldl_cholesterol",
+      "display_name": "LDL Cholesterol",
+      "unit": "mg/dL",
+      "plain_description": "LDL (low-density lipoprotein) is sometimes called 'bad' cholesterol because high levels can build up in arteries.",
+      "max_plausible": 1000.0,
+      "ranges": {
+        "all": {
+          "low": null,
+          "high": 99.0,
+          "critical_low": null,
+          "critical_high": 300.0
+        }
+      },
+      "fallback_low": null,
+      "fallback_high": "An LDL cholesterol level above the typical range can be associated with cardiovascular health concerns. Please discuss this result with your doctor."
+    },
+    {
+      "id": "hdl_cholesterol",
+      "display_name": "HDL Cholesterol",
+      "unit": "mg/dL",
+      "plain_description": "HDL (high-density lipoprotein) is sometimes called 'good' cholesterol because it helps remove other types of cholesterol from your arteries.",
+      "max_plausible": 200.0,
+      "ranges": {
+        "male": {
+          "low": 40.0,
+          "high": null,
+          "critical_low": 25.0,
+          "critical_high": null
+        },
+        "female": {
+          "low": 50.0,
+          "high": null,
+          "critical_low": 25.0,
+          "critical_high": null
+        }
+      },
+      "fallback_low": "An HDL cholesterol level below the typical range can be associated with reduced cardiovascular protection. Please discuss this result with your doctor.",
+      "fallback_high": null
+    },
+    {
+      "id": "triglycerides",
+      "display_name": "Triglycerides",
+      "unit": "mg/dL",
+      "plain_description": "Triglycerides are a type of fat found in your blood; high levels can affect heart health.",
+      "max_plausible": 5000.0,
+      "ranges": {
+        "all": {
+          "low": null,
+          "high": 149.0,
+          "critical_low": null,
+          "critical_high": 1000.0
+        }
+      },
+      "fallback_low": null,
+      "fallback_high": "A triglyceride level above the typical range can be associated with cardiovascular and metabolic concerns. Please discuss this result with your doctor."
+    },
+    {
+      "id": "creatinine",
+      "display_name": "Creatinine",
+      "unit": "mg/dL",
+      "plain_description": "Creatinine is a waste product filtered by your kidneys; levels can reflect how well your kidneys are working.",
+      "max_plausible": 30.0,
+      "ranges": {
+        "male": {
+          "low": 0.74,
+          "high": 1.35,
+          "critical_low": 0.4,
+          "critical_high": 10.0
+        },
+        "female": {
+          "low": 0.59,
+          "high": 1.04,
+          "critical_low": 0.4,
+          "critical_high": 10.0
+        }
+      },
+      "fallback_low": "A creatinine level below the typical range can be associated with reduced muscle mass. Please discuss this result with your doctor.",
+      "fallback_high": "A creatinine level above the typical range can be associated with kidney function concerns. Please discuss this result with your doctor."
+    },
+    {
+      "id": "tsh",
+      "display_name": "TSH (Thyroid Stimulating Hormone)",
+      "unit": "mIU/L",
+      "plain_description": "TSH is produced by the pituitary gland and tells the thyroid how much thyroid hormone to make.",
+      "max_plausible": 100.0,
+      "ranges": {
+        "all": {
+          "low": 0.4,
+          "high": 4.0,
+          "critical_low": 0.1,
+          "critical_high": 10.0
+        }
+      },
+      "fallback_low": "A TSH level below the typical range can be associated with an overactive thyroid. Please discuss this result with your doctor.",
+      "fallback_high": "A TSH level above the typical range can be associated with an underactive thyroid. Please discuss this result with your doctor."
+    },
+    {
+      "id": "alt",
+      "display_name": "ALT (Alanine Aminotransferase)",
+      "unit": "U/L",
+      "plain_description": "ALT is an enzyme found mainly in the liver; elevated levels can indicate liver stress or damage.",
+      "max_plausible": 5000.0,
+      "ranges": {
+        "all": {
+          "low": 7.0,
+          "high": 56.0,
+          "critical_low": null,
+          "critical_high": 1000.0
+        }
+      },
+      "fallback_low": "An ALT level below the typical range is generally not a concern but may warrant discussion with your doctor.",
+      "fallback_high": "An ALT level above the typical range can be associated with liver stress. Please discuss this result with your doctor."
+    },
+    {
+      "id": "vitamin_d",
+      "display_name": "Vitamin D, 25-Hydroxy",
+      "unit": "ng/mL",
+      "plain_description": "Vitamin D helps your body absorb calcium and supports bone, muscle, and immune health.",
+      "max_plausible": 300.0,
+      "ranges": {
+        "all": {
+          "low": 30.0,
+          "high": 100.0,
+          "critical_low": 10.0,
+          "critical_high": 150.0
+        }
+      },
+      "fallback_low": "A vitamin D level below the typical range can be associated with reduced bone and immune support. Please discuss this result with your doctor.",
+      "fallback_high": "A vitamin D level above the typical range can be associated with too much vitamin D supplement intake. Please discuss this result with your doctor."
+    },
+    {
+      "id": "ferritin",
+      "display_name": "Ferritin",
+      "unit": "ng/mL",
+      "plain_description": "Ferritin is a protein that stores iron in your body; its level reflects your iron stores.",
+      "max_plausible": 10000.0,
+      "ranges": {
+        "male": {
+          "low": 24.0,
+          "high": 336.0,
+          "critical_low": 10.0,
+          "critical_high": 1000.0
+        },
+        "female": {
+          "low": 11.0,
+          "high": 307.0,
+          "critical_low": 10.0,
+          "critical_high": 1000.0
+        }
+      },
+      "fallback_low": "A ferritin level below the typical range can be associated with low iron stores. Please discuss this result with your doctor.",
+      "fallback_high": "A ferritin level above the typical range can be associated with iron overload or inflammation. Please discuss this result with your doctor."
+    }
+  ]
+}
