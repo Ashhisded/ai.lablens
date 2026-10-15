@@ -56,9 +56,7 @@ class TestStaticFallbackProvider:
     def test_returns_fallback_for_high(self):
         provider = StaticFallbackProvider()
         flagged = [
-            make_flagged(
-                "fasting_glucose", TestStatus.HIGH, "Fasting Glucose", "mg/dL", 70, 99
-            )
+            make_flagged("fasting_glucose", TestStatus.HIGH, "Fasting Glucose", "mg/dL", 70, 99)
         ]
         result = provider.explain(flagged)
         assert result.source == "fallback"
@@ -115,9 +113,7 @@ class TestGeminiProvider:
         _cached_llm_call.cache_clear()
         with (
             patch("app.explainer.get_settings") as mock_settings,
-            patch(
-                "app.explainer._cached_llm_call", return_value=good_response
-            ) as mock_call,
+            patch("app.explainer._cached_llm_call", return_value=good_response) as mock_call,
         ):
             setattr(mock_settings.return_value, "gemini_api_key", "fake-key")
             provider = GeminiProvider()

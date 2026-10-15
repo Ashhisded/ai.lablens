@@ -6,6 +6,8 @@ import os
 from functools import lru_cache
 from pathlib import Path
 
+from app.constants import MAX_BODY_SIZE
+
 
 def _load_env_file() -> None:
     """Load key-value pairs from .env into os.environ if present."""
@@ -32,12 +34,10 @@ class Settings:
         # Default to a current, fast Gemini Flash model.
         self.gemini_model: str = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash")
         self.app_env: str = os.environ.get("APP_ENV", "development")
-        self.cors_origins: list[str] = self._parse_cors_origins(
-            os.environ.get("CORS_ORIGINS", "")
-        )
+        self.cors_origins: list[str] = self._parse_cors_origins(os.environ.get("CORS_ORIGINS", ""))
         self.rate_limit_rpm: int = int(os.environ.get("RATE_LIMIT_RPM", "20"))
-        # Maximum allowed request body size in bytes.
-        self.max_body_size: int = 10_240  # 10 KB
+        # Maximum allowed request body size in bytes — see constants.MAX_BODY_SIZE.
+        self.max_body_size: int = MAX_BODY_SIZE
 
     @property
     def is_production(self) -> bool:

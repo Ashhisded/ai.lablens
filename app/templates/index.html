@@ -1,43 +1,31 @@
 {% extends "base.html" %}
-{% block title %}LabLens – Understand Your Lab Results{% endblock %}
+{% block title %}LabLens – Lab Report Analyzer{% endblock %}
 
 {% block content %}
-<div class="container">
-  <section class="hero">
-    <h1>Understand Your Lab Results</h1>
-    <p class="hero-sub">
-      Enter values from your blood test report below.
-      LabLens will compare them to typical adult reference ranges
-      and give you plain-language explanations of anything outside the norm.
+<div class="container form-page-container">
+  <section class="form-header">
+    <h1 id="analyzer-heading">Blood Test Value Analyzer</h1>
+    <p class="form-intro-lead">
+      Enter the values from your official laboratory report. Select your biological sex for accurate clinical reference intervals.
+      <strong>Leave any tests that were not performed blank</strong>—only tested values will be evaluated.
+      <strong>At least one test value is required.</strong>
     </p>
-  </section>
 
-  <!-- How to use this tool -->
-  <section class="help-block" aria-labelledby="how-to-use-heading">
-    <h2 id="how-to-use-heading">How to use this tool</h2>
-    <ol>
-      <li>Select your <strong>biological sex</strong> — some ranges differ between males and females.</li>
-      <li>Enter the numeric values from your lab report in the matching fields. Leave fields blank if a test wasn't done.</li>
-      <li>Click <strong>Analyse Results</strong>.</li>
-      <li>Review the colour-coded table and plain-language explanations.</li>
-      <li><strong>Always discuss any abnormal results with your doctor.</strong></li>
-    </ol>
-
-    <details class="find-values">
-      <summary>Where do I find these values?</summary>
-      <p>
-        Your lab values are on the printed or digital report from your doctor's office,
-        hospital, or testing laboratory. Look for a column labelled "Result" or "Value"
-        next to each test name. The units (e.g., g/dL, mg/dL) are shown alongside.
-        If you are unsure which number to enter, ask your healthcare provider.
-      </p>
-    </details>
+    <div class="sample-actions" role="region" aria-label="Quick fill shortcuts">
+      <button type="button" class="btn btn-outline" id="fill-sample-btn">
+        <span aria-hidden="true">⚡</span> Fill sample values
+      </button>
+      <button type="button" class="btn btn-ghost" id="clear-form-btn">
+        <span aria-hidden="true">✕</span> Clear form
+      </button>
+      <span class="sample-hint" id="sample-hint">Loads an example panel with realistic sample values to test the analyzer.</span>
+    </div>
   </section>
 
   <!-- Error summary (shown only on validation failure) -->
   {% if error %}
   <div class="error-summary" role="alert" aria-live="polite" id="error-summary" tabindex="-1">
-    <h2>There was a problem</h2>
+    <h2>Please review the following errors:</h2>
     <p>{{ error }}</p>
   </div>
   {% endif %}
@@ -49,180 +37,219 @@
     class="lab-form"
     id="lab-form"
     novalidate
-    aria-describedby="form-intro"
+    aria-describedby="analyzer-heading"
   >
-    <p id="form-intro" class="form-intro">
-      All fields are optional except <strong>Biological Sex</strong>.
-      Enter only the values from your report.
-    </p>
-
-    <!-- Sex selection -->
-    <fieldset class="fieldset-sex">
-      <legend>Biological Sex <span class="required" aria-label="required">*</span></legend>
-      <div class="radio-group">
+    <!-- Sex selection (Required) -->
+    <fieldset class="fieldset-card fieldset-sex" id="fs-sex">
+      <legend class="fieldset-legend">Biological Sex <span class="required-badge" aria-label="required">*</span></legend>
+      <p class="field-hint" id="sex-hint">Many standard blood reference intervals (such as hemoglobin and ferritin) differ between biological sexes.</p>
+      <div class="radio-group" role="radiogroup" aria-labelledby="fs-sex">
         <label class="radio-label">
-          <input type="radio" name="sex" value="male" required
-            {% if not error %}{% endif %}>
-          Male
+          <input type="radio" name="sex" id="sex-male" value="male" required aria-describedby="sex-hint">
+          <span>Male</span>
         </label>
         <label class="radio-label">
-          <input type="radio" name="sex" value="female" required>
-          Female
+          <input type="radio" name="sex" id="sex-female" value="female" required aria-describedby="sex-hint">
+          <span>Female</span>
         </label>
       </div>
     </fieldset>
 
-    <!-- Age band (optional) -->
-    <fieldset class="fieldset-age">
-      <legend>Age Band <span class="optional">(optional)</span></legend>
+    <!-- Age band (Optional) -->
+    <fieldset class="fieldset-card fieldset-age">
+      <legend class="fieldset-legend">Age Group <span class="optional-badge">(optional)</span></legend>
       <div class="select-wrapper">
-        <label for="age_band" class="sr-only">Age Band</label>
-        <select name="age_band" id="age_band">
-          <option value="">Prefer not to say / Not applicable</option>
+        <label for="age_band" class="field-label">Select Age Category</label>
+        <select name="age_band" id="age_band" class="form-select" aria-describedby="age-hint">
+          <option value="">Standard Adult (18+)</option>
           <option value="under_18">Under 18</option>
           <option value="18_64">18 – 64</option>
           <option value="65_plus">65 and older</option>
         </select>
       </div>
-      <p class="field-hint" id="age-hint">
-        Age bands are recorded for context only. Reference ranges shown are standard adult values.
-      </p>
+      <p class="field-hint" id="age-hint">Reference ranges shown in LabLens are validated for general adult populations.</p>
     </fieldset>
 
-    <!-- Blood Count -->
-    <fieldset class="fieldset-tests" id="fs-blood-count">
-      <legend>Blood Count</legend>
+    <!-- Blood Count Fieldset -->
+    <fieldset class="fieldset-card fieldset-tests" id="fs-blood-count">
+      <legend class="fieldset-legend">Complete Blood Count (CBC) &amp; Iron</legend>
+      <p class="group-desc">Measures oxygen-carrying capacity, infection-fighting cells, and clotting components.</p>
 
       {% for test in tests if test.id in ['hemoglobin', 'wbc', 'platelets', 'ferritin'] %}
       <div class="field-row">
-        <label for="{{ test.id }}">
-          {{ test.display_name }}
-          <span class="unit">({{ test.unit }})</span>
-        </label>
-        <input
-          type="number"
-          id="{{ test.id }}"
-          name="{{ test.id }}"
-          step="any"
-          min="0"
-          placeholder="Leave blank if not tested"
-          aria-describedby="{{ test.id }}-hint"
-          autocomplete="off"
-          inputmode="decimal"
-        >
-        <p class="field-hint" id="{{ test.id }}-hint">{{ test.plain_description }}</p>
+        <div class="field-label-group">
+          <label for="{{ test.id }}" class="field-label">
+            {{ test.display_name }}
+            <span class="unit-badge">({{ test.unit }})</span>
+          </label>
+          <p class="field-hint" id="{{ test.id }}-hint">
+            {{ test.plain_description }} (Leave blank if not tested)
+          </p>
+        </div>
+        <div class="field-input-group">
+          <input
+            type="number"
+            id="{{ test.id }}"
+            name="{{ test.id }}"
+            class="form-input"
+            step="any"
+            min="0"
+            max="{{ test.max_plausible }}"
+            placeholder="e.g. {% if test.id == 'hemoglobin' %}14.2{% elif test.id == 'wbc' %}6.5{% elif test.id == 'platelets' %}250{% elif test.id == 'ferritin' %}85{% endif %}"
+            aria-describedby="{{ test.id }}-hint"
+            autocomplete="off"
+            inputmode="decimal"
+          >
+        </div>
       </div>
       {% endfor %}
     </fieldset>
 
-    <!-- Blood Sugar -->
-    <fieldset class="fieldset-tests" id="fs-blood-sugar">
-      <legend>Blood Sugar</legend>
+    <!-- Blood Sugar Fieldset -->
+    <fieldset class="fieldset-card fieldset-tests" id="fs-blood-sugar">
+      <legend class="fieldset-legend">Blood Sugar &amp; Diabetes Markers</legend>
+      <p class="group-desc">Evaluates short-term fasting glucose and long-term glycemic management.</p>
 
       {% for test in tests if test.id in ['fasting_glucose', 'hba1c'] %}
       <div class="field-row">
-        <label for="{{ test.id }}">
-          {{ test.display_name }}
-          <span class="unit">({{ test.unit }})</span>
-        </label>
-        <input
-          type="number"
-          id="{{ test.id }}"
-          name="{{ test.id }}"
-          step="any"
-          min="0"
-          placeholder="Leave blank if not tested"
-          aria-describedby="{{ test.id }}-hint"
-          autocomplete="off"
-          inputmode="decimal"
-        >
-        <p class="field-hint" id="{{ test.id }}-hint">{{ test.plain_description }}</p>
+        <div class="field-label-group">
+          <label for="{{ test.id }}" class="field-label">
+            {{ test.display_name }}
+            <span class="unit-badge">({{ test.unit }})</span>
+          </label>
+          <p class="field-hint" id="{{ test.id }}-hint">
+            {{ test.plain_description }} (Leave blank if not tested)
+          </p>
+        </div>
+        <div class="field-input-group">
+          <input
+            type="number"
+            id="{{ test.id }}"
+            name="{{ test.id }}"
+            class="form-input"
+            step="any"
+            min="0"
+            max="{{ test.max_plausible }}"
+            placeholder="e.g. {% if test.id == 'fasting_glucose' %}92{% elif test.id == 'hba1c' %}5.4{% endif %}"
+            aria-describedby="{{ test.id }}-hint"
+            autocomplete="off"
+            inputmode="decimal"
+          >
+        </div>
       </div>
       {% endfor %}
     </fieldset>
 
-    <!-- Cholesterol & Fats -->
-    <fieldset class="fieldset-tests" id="fs-cholesterol">
-      <legend>Cholesterol &amp; Fats</legend>
+    <!-- Lipid Panel Fieldset -->
+    <fieldset class="fieldset-card fieldset-tests" id="fs-cholesterol">
+      <legend class="fieldset-legend">Lipid Panel (Cholesterol &amp; Triglycerides)</legend>
+      <p class="group-desc">Key blood fats related to cardiovascular wellbeing and arterial health.</p>
 
       {% for test in tests if test.id in ['total_cholesterol', 'ldl_cholesterol', 'hdl_cholesterol', 'triglycerides'] %}
       <div class="field-row">
-        <label for="{{ test.id }}">
-          {{ test.display_name }}
-          <span class="unit">({{ test.unit }})</span>
-        </label>
-        <input
-          type="number"
-          id="{{ test.id }}"
-          name="{{ test.id }}"
-          step="any"
-          min="0"
-          placeholder="Leave blank if not tested"
-          aria-describedby="{{ test.id }}-hint"
-          autocomplete="off"
-          inputmode="decimal"
-        >
-        <p class="field-hint" id="{{ test.id }}-hint">{{ test.plain_description }}</p>
+        <div class="field-label-group">
+          <label for="{{ test.id }}" class="field-label">
+            {{ test.display_name }}
+            <span class="unit-badge">({{ test.unit }})</span>
+          </label>
+          <p class="field-hint" id="{{ test.id }}-hint">
+            {{ test.plain_description }} (Leave blank if not tested)
+          </p>
+        </div>
+        <div class="field-input-group">
+          <input
+            type="number"
+            id="{{ test.id }}"
+            name="{{ test.id }}"
+            class="form-input"
+            step="any"
+            min="0"
+            max="{{ test.max_plausible }}"
+            placeholder="e.g. {% if test.id == 'total_cholesterol' %}185{% elif test.id == 'ldl_cholesterol' %}95{% elif test.id == 'hdl_cholesterol' %}55{% elif test.id == 'triglycerides' %}120{% endif %}"
+            aria-describedby="{{ test.id }}-hint"
+            autocomplete="off"
+            inputmode="decimal"
+          >
+        </div>
       </div>
       {% endfor %}
     </fieldset>
 
-    <!-- Organ Function -->
-    <fieldset class="fieldset-tests" id="fs-organs">
-      <legend>Kidney, Liver &amp; Thyroid</legend>
+    <!-- Organ Function Fieldset -->
+    <fieldset class="fieldset-card fieldset-tests" id="fs-organs">
+      <legend class="fieldset-legend">Kidney, Liver &amp; Thyroid Function</legend>
+      <p class="group-desc">Primary biochemical markers for renal filtration, hepatic metabolism, and thyroid regulation.</p>
 
-      {% for test in tests if test.id in ['creatinine', 'tsh', 'alt'] %}
+      {% for test in tests if test.id in ['creatinine', 'alt', 'tsh'] %}
       <div class="field-row">
-        <label for="{{ test.id }}">
-          {{ test.display_name }}
-          <span class="unit">({{ test.unit }})</span>
-        </label>
-        <input
-          type="number"
-          id="{{ test.id }}"
-          name="{{ test.id }}"
-          step="any"
-          min="0"
-          placeholder="Leave blank if not tested"
-          aria-describedby="{{ test.id }}-hint"
-          autocomplete="off"
-          inputmode="decimal"
-        >
-        <p class="field-hint" id="{{ test.id }}-hint">{{ test.plain_description }}</p>
+        <div class="field-label-group">
+          <label for="{{ test.id }}" class="field-label">
+            {{ test.display_name }}
+            <span class="unit-badge">({{ test.unit }})</span>
+          </label>
+          <p class="field-hint" id="{{ test.id }}-hint">
+            {{ test.plain_description }} (Leave blank if not tested)
+          </p>
+        </div>
+        <div class="field-input-group">
+          <input
+            type="number"
+            id="{{ test.id }}"
+            name="{{ test.id }}"
+            class="form-input"
+            step="any"
+            min="0"
+            max="{{ test.max_plausible }}"
+            placeholder="e.g. {% if test.id == 'creatinine' %}0.9{% elif test.id == 'alt' %}24{% elif test.id == 'tsh' %}1.8{% endif %}"
+            aria-describedby="{{ test.id }}-hint"
+            autocomplete="off"
+            inputmode="decimal"
+          >
+        </div>
       </div>
       {% endfor %}
     </fieldset>
 
-    <!-- Vitamins -->
-    <fieldset class="fieldset-tests" id="fs-vitamins">
-      <legend>Vitamins &amp; Minerals</legend>
+    <!-- Vitamins & Minerals Fieldset -->
+    <fieldset class="fieldset-card fieldset-tests" id="fs-vitamins">
+      <legend class="fieldset-legend">Vitamins &amp; Essential Nutrients</legend>
+      <p class="group-desc">Assesses essential nutritional biomarkers critical for immune and metabolic function.</p>
 
       {% for test in tests if test.id in ['vitamin_d'] %}
       <div class="field-row">
-        <label for="{{ test.id }}">
-          {{ test.display_name }}
-          <span class="unit">({{ test.unit }})</span>
-        </label>
-        <input
-          type="number"
-          id="{{ test.id }}"
-          name="{{ test.id }}"
-          step="any"
-          min="0"
-          placeholder="Leave blank if not tested"
-          aria-describedby="{{ test.id }}-hint"
-          autocomplete="off"
-          inputmode="decimal"
-        >
-        <p class="field-hint" id="{{ test.id }}-hint">{{ test.plain_description }}</p>
+        <div class="field-label-group">
+          <label for="{{ test.id }}" class="field-label">
+            {{ test.display_name }}
+            <span class="unit-badge">({{ test.unit }})</span>
+          </label>
+          <p class="field-hint" id="{{ test.id }}-hint">
+            {{ test.plain_description }} (Leave blank if not tested)
+          </p>
+        </div>
+        <div class="field-input-group">
+          <input
+            type="number"
+            id="{{ test.id }}"
+            name="{{ test.id }}"
+            class="form-input"
+            step="any"
+            min="0"
+            max="{{ test.max_plausible }}"
+            placeholder="e.g. 35"
+            aria-describedby="{{ test.id }}-hint"
+            autocomplete="off"
+            inputmode="decimal"
+          >
+        </div>
       </div>
       {% endfor %}
     </fieldset>
 
     <div class="form-actions">
-      <button type="submit" class="btn-primary" id="submit-btn">
-        Analyse Results
+      <button type="submit" class="btn btn-primary btn-large" id="submit-btn">
+        <span class="btn-text">Analyze My Lab Results</span>
       </button>
+      <p class="submit-note">Processed in-memory &bull; Never stored &bull; Free &amp; Private</p>
     </div>
   </form>
 </div>

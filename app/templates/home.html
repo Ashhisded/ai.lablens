@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}LabLens – Understand Your Blood Test Results{% endblock %}
+
+{% block content %}
+<div class="container home-container">
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="hero-badge">Healthcare Accessibility &bull; AI Literacy</div>
+    <h1 id="hero-heading" class="hero-title">Understand your blood test results in plain language</h1>
+    <p class="hero-sub">
+      Medical lab reports are filled with clinical jargon and numbers that cause unnecessary anxiety.
+      LabLens combines deterministic clinical reference ranges with guarded AI to give you clear,
+      understandable explanations and tailored questions for your doctor.
+    </p>
+    <div class="hero-actions">
+      <a href="/analyze" class="btn btn-primary btn-large">Check my lab values</a>
+      <a href="#how-it-works" class="btn btn-secondary">How it works</a>
+    </div>
+  </section>
+
+  <!-- How it works section -->
+  <section id="how-it-works" class="section-cards" aria-labelledby="how-heading">
+    <h2 id="how-heading" class="section-title">How LabLens Works</h2>
+    <p class="section-sub">A safe, 3-step pipeline designed for clarity and peace of mind.</p>
+
+    <div class="cards-grid">
+      <article class="feature-card">
+        <div class="card-step-badge" aria-hidden="true">1</div>
+        <h3>Enter your values</h3>
+        <p>
+          Input your numbers from your routine blood report. Choose your biological sex so ranges are accurate.
+          No sign-up or personal identifying information is ever requested.
+        </p>
+      </article>
+
+      <article class="feature-card">
+        <div class="card-step-badge" aria-hidden="true">2</div>
+        <h3>Deterministic range check</h3>
+        <p>
+          Our rule-based engine compares each value against peer-reviewed adult reference ranges from MedlinePlus
+          and Mayo Clinic Laboratories. No AI is used for clinical classification.
+        </p>
+      </article>
+
+      <article class="feature-card">
+        <div class="card-step-badge" aria-hidden="true">3</div>
+        <h3>Plain-language insights</h3>
+        <p>
+          For any flagged values, guarded AI explains general biological roles at an 8th-grade reading level,
+          along with structured questions to bring to your next healthcare appointment.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- What LabLens is NOT box -->
+  <section class="what-not-box" aria-labelledby="what-not-heading">
+    <div class="what-not-header">
+      <span class="warning-icon" aria-hidden="true">🛡️</span>
+      <h2 id="what-not-heading">What LabLens is NOT</h2>
+    </div>
+    <ul class="what-not-list">
+      <li><strong>Not a medical diagnostic tool:</strong> LabLens cannot and does not diagnose illnesses or conditions.</li>
+      <li><strong>Not medical advice or treatment:</strong> It never recommends medications, dosages, or self-treatment therapies.</li>
+      <li><strong>Not a substitute for your doctor:</strong> Clinical decisions must always be made with a licensed physician who knows your complete medical history.</li>
+    </ul>
+  </section>
+
+  <!-- Privacy guarantee section -->
+  <section class="privacy-banner" aria-labelledby="privacy-heading">
+    <div class="privacy-content">
+      <span class="privacy-icon" aria-hidden="true">🔒</span>
+      <div>
+        <h2 id="privacy-heading" class="privacy-title">Strict Privacy Guarantee</h2>
+        <p class="privacy-text">
+          Your health data stays yours. LabLens processes lab values completely in-memory.
+          We have no database, we do not store health entries, and our application logs record only anonymous request
+          identifiers and status codes—never patient inputs.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA section -->
+  <section class="cta-section">
+    <h2>Ready to review your lab report?</h2>
+    <p>Try it out in seconds—you can enter your own numbers or load realistic sample values with one click.</p>
+    <a href="/analyze" class="btn btn-primary btn-large">Get Started Now</a>
+  </section>
+</div>
+{% endblock %}

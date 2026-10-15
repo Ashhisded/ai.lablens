@@ -12,6 +12,7 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
 from app.config import get_settings
+from app.constants import MAX_BODY_SIZE, RATE_LIMIT_WINDOW
 
 logger = logging.getLogger(__name__)
 
@@ -60,9 +61,7 @@ def add_no_store_header(response: Response) -> None:
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     """Add security headers to every response."""
 
-    async def dispatch(
-        self, request: Request, call_next: RequestResponseEndpoint
-    ) -> Response:
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         """Process request and inject security headers.
 
         Args:
@@ -85,9 +84,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
     """Reject requests exceeding the configured body size limit."""
 
-    async def dispatch(
-        self, request: Request, call_next: RequestResponseEndpoint
-    ) -> Response:
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         """Enforce maximum body size.
 
         Args:
@@ -97,9 +94,8 @@ class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
         Returns:
             413 if body is too large, otherwise the normal response.
         """
-        settings = get_settings()
         content_length = request.headers.get("content-length")
-        if content_length and int(content_length) > settings.max_body_size:
+        if content_length and int(content_length) > MAX_BODY_SIZE:
             return JSONResponse(
                 status_code=413,
                 content={"detail": "Request body too large."},
@@ -113,7 +109,7 @@ class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
 
 # ip -> list of request timestamps (epoch seconds)
 _request_log: dict[str, list[float]] = defaultdict(list)
-_WINDOW = 60.0  # seconds
+_WINDOW = RATE_LIMIT_WINDOW  # seconds — defined in constants.py
 
 
 def _get_client_ip(request: Request) -> str:

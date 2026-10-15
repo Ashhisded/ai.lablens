@@ -30,9 +30,7 @@ class TestTemplatesSafety:
         templates_dir = ROOT / "app" / "templates"
         for tmpl in templates_dir.glob("*.html"):
             content = tmpl.read_text(encoding="utf-8")
-            assert (
-                "|safe" not in content
-            ), f"Template '{tmpl.name}' uses |safe filter (XSS risk)"
+            assert "|safe" not in content, f"Template '{tmpl.name}' uses |safe filter (XSS risk)"
 
 
 class TestEnvFileNotTracked:
@@ -74,14 +72,8 @@ class TestNoHardcodedSecrets:
         except (subprocess.TimeoutExpired, FileNotFoundError):
             pass
         # Fallback: scan Python and config files directly
-        files = (
-            list(ROOT.rglob("*.py"))
-            + list(ROOT.rglob("*.toml"))
-            + list(ROOT.rglob("*.txt"))
-        )
-        return [
-            f for f in files if ".venv" not in str(f) and "__pycache__" not in str(f)
-        ]
+        files = list(ROOT.rglob("*.py")) + list(ROOT.rglob("*.toml")) + list(ROOT.rglob("*.txt"))
+        return [f for f in files if ".venv" not in str(f) and "__pycache__" not in str(f)]
 
     def test_no_hardcoded_api_keys(self):
         files = self._get_tracked_files()
@@ -114,10 +106,7 @@ class TestNoHardcodedSecrets:
                                 continue
                             if "api_key" in pattern and "api_key" in stripped:
                                 # Check if it's just a variable name reference, not an assignment with a real value
-                                if (
-                                    "your-key-here" in stripped
-                                    or "placeholder" in stripped
-                                ):
+                                if "your-key-here" in stripped or "placeholder" in stripped:
                                     continue
                                 # Skip test files that reference the pattern name
                                 if "test_" in str(filepath) or "PATTERNS" in stripped:

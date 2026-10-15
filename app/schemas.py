@@ -8,17 +8,22 @@ from typing import Any
 
 from pydantic import BaseModel, field_validator
 
+from app.constants import MEDICAL_DISCLAIMER
 from app.rules_engine import KNOWN_TEST_IDS, MAX_PLAUSIBLE, TestStatus
 
 # ---------------------------------------------------------------------------
 # Enums
 # ---------------------------------------------------------------------------
 
-MEDICAL_DISCLAIMER = (
-    "This tool is for educational purposes only and is not medical advice. "
-    "Reference ranges vary between laboratories. "
-    "Always consult a qualified healthcare professional about your results."
-)
+# Re-exported from constants for backward compatibility.
+__all__ = [
+    "MEDICAL_DISCLAIMER",
+    "AgeBand",
+    "AnalysisRequest",
+    "AnalysisResponse",
+    "Sex",
+    "TestResultItem",
+]
 
 
 class Sex(str, Enum):
@@ -93,6 +98,7 @@ class TestResultItem(BaseModel):
     low: float | None
     high: float | None
     explanation: str | None = None
+    questions_to_ask: list[str] = []
 
 
 class AnalysisResponse(BaseModel):

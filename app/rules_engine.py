@@ -9,9 +9,23 @@ import json
 import logging
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
+
+from app.errors import LabLensError, UnknownTestError
 
 logger = logging.getLogger(__name__)
+
+__all__ = [
+    "KNOWN_TEST_IDS",
+    "MAX_PLAUSIBLE",
+    "LabLensError",
+    "Sex",
+    "TestStatus",
+    "UnknownTestError",
+    "classify",
+    "get_bounds_for_display",
+    "get_meta",
+]
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -37,19 +51,6 @@ class Sex(str, Enum):
     FEMALE = "female"
 
 
-class LabLensError(Exception):
-    """Base domain error for LabLens."""
-
-
-class UnknownTestError(LabLensError):
-    """Raised when an unrecognised test ID is requested."""
-
-    def __init__(self, test_id: str) -> None:
-        """Initialise with the unknown test ID."""
-        super().__init__(f"Unknown test ID: '{test_id}'")
-        self.test_id = test_id
-
-
 # ---------------------------------------------------------------------------
 # Data loading — runs once at module import
 # ---------------------------------------------------------------------------
@@ -58,7 +59,7 @@ class UnknownTestError(LabLensError):
 def _load_reference_data() -> dict[str, Any]:
     """Load and return the raw reference data JSON."""
     with _DATA_PATH.open(encoding="utf-8") as fh:
-        return json.load(fh)
+        return cast(dict[str, Any], json.load(fh))
 
 
 def _build_index(
@@ -83,6 +84,7 @@ def _build_index(
             "plain_description": test["plain_description"],
             "fallback_low": test.get("fallback_low"),
             "fallback_high": test.get("fallback_high"),
+            "questions_to_ask": test.get("questions_to_ask", []),
         }
 
     return ranges_index, max_plausible_index, meta_index
@@ -183,4 +185,4 @@ def get_meta(test_id: str) -> dict[str, Any]:
     """
     if test_id not in _META_INDEX:
         raise UnknownTestError(test_id)
-    return _META_INDEX[test_id]
+    return cast(dict[str, Any], _META_INDEX[test_id])

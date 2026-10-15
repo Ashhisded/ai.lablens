@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found – LabLens{% endblock %}
+
+{% block content %}
+<div class="container error-page-container">
+  <div class="error-dialog-box" role="region" aria-labelledby="error-404-title">
+    <div class="error-code-badge" aria-hidden="true">404</div>
+    <h1 id="error-404-title">Page Not Found</h1>
+    <p class="error-description">
+      We couldn't find the page you requested. The link may be outdated, or the address might have been typed incorrectly.
+    </p>
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary">Return to Home</a>
+      <a href="/analyze" class="btn btn-secondary">Go to Analyzer</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

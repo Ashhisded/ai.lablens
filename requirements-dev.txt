@@ -5,3 +5,4 @@ pytest-asyncio==0.24.0    # Async test support
 httpx==0.28.1             # HTTPX for FastAPI TestClient
 ruff==0.8.6               # Linter and formatter
 beautifulsoup4==4.12.3    # HTML parsing for accessibility smoke tests
+mypy==1.14.1              # Static type checking

@@ -25,7 +25,11 @@
         }
       },
       "fallback_low": "A hemoglobin level below the typical range can be associated with anemia, which may cause fatigue or weakness. Many factors can affect hemoglobin. Please discuss this result with your doctor.",
-      "fallback_high": "A hemoglobin level above the typical range can be associated with dehydration or other conditions. Please discuss this result with your doctor."
+      "fallback_high": "A hemoglobin level above the typical range can be associated with dehydration or other conditions. Please discuss this result with your doctor.",
+      "questions_to_ask": [
+        "Could my hemoglobin level explain any feelings of fatigue or low energy?",
+        "Are there specific dietary changes or follow-up blood tests you recommend?"
+      ]
     },
     {
       "id": "wbc",
@@ -42,7 +46,11 @@
         }
       },
       "fallback_low": "A white blood cell count below the typical range can be associated with reduced infection-fighting ability. Please discuss this result with your doctor.",
-      "fallback_high": "A white blood cell count above the typical range can be associated with infection or inflammation. Please discuss this result with your doctor."
+      "fallback_high": "A white blood cell count above the typical range can be associated with infection or inflammation. Please discuss this result with your doctor.",
+      "questions_to_ask": [
+        "Does this white blood cell count indicate a recent infection or inflammation?",
+        "Should we repeat this test in a few weeks to monitor any changes?"
+      ]
     },
     {
       "id": "platelets",
@@ -59,7 +67,11 @@
         }
       },
       "fallback_low": "A platelet count below the typical range can be associated with an increased risk of bruising or bleeding. Please discuss this result with your doctor.",
-      "fallback_high": "A platelet count above the typical range can be associated with clotting concerns. Please discuss this result with your doctor."
+      "fallback_high": "A platelet count above the typical range can be associated with clotting concerns. Please discuss this result with your doctor.",
+      "questions_to_ask": [
+        "Does my platelet level affect my risk of bleeding or bruising?",
+        "Could any medications or supplements I take be influencing this count?"
+      ]
     },
     {
       "id": "fasting_glucose",
@@ -76,7 +88,11 @@
         }
       },
       "fallback_low": "A fasting glucose level below the typical range may indicate low blood sugar. Please discuss this result with your doctor.",
-      "fallback_high": "A fasting glucose level above the typical range can be associated with prediabetes or blood sugar regulation concerns. Please discuss this result with your doctor."
+      "fallback_high": "A fasting glucose level above the typical range can be associated with prediabetes or blood sugar regulation concerns. Please discuss this result with your doctor.",
+      "questions_to_ask": [
+        "Does this fasting blood sugar level suggest prediabetes or another metabolic concern?",
+        "What lifestyle adjustments or further monitoring would you advise?"
+      ]
     },
     {
       "id": "hba1c",
@@ -93,7 +109,11 @@
         }
       },
       "fallback_low": null,
-      "fallback_high": "An HbA1c above the typical range can be associated with elevated average blood sugar. Please discuss this result with your doctor."
+      "fallback_high": "An HbA1c above the typical range can be associated with elevated average blood sugar. Please discuss this result with your doctor.",
+      "questions_to_ask": [
+        "What does this HbA1c value mean for my long-term blood sugar control?",
+        "Should we schedule follow-up testing or consider meeting with a dietitian?"
+      ]
     },
     {
       "id": "total_cholesterol",
@@ -110,7 +130,11 @@
         }
       },
       "fallback_low": null,
-      "fallback_high": "A total cholesterol level above the typical range can be associated with an increased risk of cardiovascular concerns. Please discuss this result with your doctor."
+      "fallback_high": "A total cholesterol level above the typical range can be associated with an increased risk of cardiovascular concerns. Please discuss this result with your doctor.",
+      "questions_to_ask": [
+        "How does this total cholesterol reading fit into my overall cardiovascular risk?",
+        "What dietary or exercise habits could help optimize my lipid profile?"
+      ]
     },
     {
       "id": "ldl_cholesterol",
@@ -127,7 +151,11 @@
         }
       },
       "fallback_low": null,
-      "fallback_high": "An LDL cholesterol level above the typical range can be associated with cardiovascular health concerns. Please discuss this result with your doctor."
+      "fallback_high": "An LDL cholesterol level above the typical range can be associated with cardiovascular health concerns. Please discuss this result with your doctor.",
+      "questions_to_ask": [
+        "What target LDL level should I be aiming for based on my overall health?",
+        "Are lifestyle modifications sufficient, or do we need to consider treatment?"
+      ]
     },
     {
       "id": "hdl_cholesterol",
@@ -150,7 +178,11 @@
         }
       },
       "fallback_low": "An HDL cholesterol level below the typical range can be associated with reduced cardiovascular protection. Please discuss this result with your doctor.",
-      "fallback_high": null
+      "fallback_high": null,
+      "questions_to_ask": [
+        "Is my HDL level providing adequate protection for my heart health?",
+        "What activities or nutritional choices can help maintain or improve this level?"
+      ]
     },
     {
       "id": "triglycerides",
@@ -167,7 +199,11 @@
         }
       },
       "fallback_low": null,
-      "fallback_high": "A triglyceride level above the typical range can be associated with cardiovascular and metabolic concerns. Please discuss this result with your doctor."
+      "fallback_high": "A triglyceride level above the typical range can be associated with cardiovascular and metabolic concerns. Please discuss this result with your doctor.",
+      "questions_to_ask": [
+        "Could my diet, alcohol intake, or metabolic factors be affecting my triglycerides?",
+        "What practical steps can I take to help bring this into an optimal range?"
+      ]
     },
     {
       "id": "creatinine",
@@ -190,7 +226,11 @@
         }
       },
       "fallback_low": "A creatinine level below the typical range can be associated with reduced muscle mass. Please discuss this result with your doctor.",
-      "fallback_high": "A creatinine level above the typical range can be associated with kidney function concerns. Please discuss this result with your doctor."
+      "fallback_high": "A creatinine level above the typical range can be associated with kidney function concerns. Please discuss this result with your doctor.",
+      "questions_to_ask": [
+        "Does this creatinine result indicate any change in how well my kidneys are filtering?",
+        "Should I have an estimated GFR or urine test done for a more complete picture?"
+      ]
     },
     {
       "id": "tsh",
@@ -207,7 +247,11 @@
         }
       },
       "fallback_low": "A TSH level below the typical range can be associated with an overactive thyroid. Please discuss this result with your doctor.",
-      "fallback_high": "A TSH level above the typical range can be associated with an underactive thyroid. Please discuss this result with your doctor."
+      "fallback_high": "A TSH level above the typical range can be associated with an underactive thyroid. Please discuss this result with your doctor.",
+      "questions_to_ask": [
+        "Could my TSH level point to an underactive or overactive thyroid?",
+        "Would you recommend checking free T4 or other thyroid antibodies?"
+      ]
     },
     {
       "id": "alt",
@@ -224,7 +268,11 @@
         }
       },
       "fallback_low": "An ALT level below the typical range is generally not a concern but may warrant discussion with your doctor.",
-      "fallback_high": "An ALT level above the typical range can be associated with liver stress. Please discuss this result with your doctor."
+      "fallback_high": "An ALT level above the typical range can be associated with liver stress. Please discuss this result with your doctor.",
+      "questions_to_ask": [
+        "Could this ALT level be related to medications, diet, or liver health?",
+        "Do you recommend repeating liver enzyme tests or performing an ultrasound?"
+      ]
     },
     {
       "id": "vitamin_d",
@@ -241,7 +289,11 @@
         }
       },
       "fallback_low": "A vitamin D level below the typical range can be associated with reduced bone and immune support. Please discuss this result with your doctor.",
-      "fallback_high": "A vitamin D level above the typical range can be associated with too much vitamin D supplement intake. Please discuss this result with your doctor."
+      "fallback_high": "A vitamin D level above the typical range can be associated with too much vitamin D supplement intake. Please discuss this result with your doctor.",
+      "questions_to_ask": [
+        "Is my vitamin D level adequate for bone and immune health?",
+        "Would you recommend an over-the-counter vitamin D supplement and at what dosage?"
+      ]
     },
     {
       "id": "ferritin",
@@ -264,7 +316,11 @@
         }
       },
       "fallback_low": "A ferritin level below the typical range can be associated with low iron stores. Please discuss this result with your doctor.",
-      "fallback_high": "A ferritin level above the typical range can be associated with iron overload or inflammation. Please discuss this result with your doctor."
+      "fallback_high": "A ferritin level above the typical range can be associated with iron overload or inflammation. Please discuss this result with your doctor.",
+      "questions_to_ask": [
+        "Does my ferritin level indicate low or high iron stores in my body?",
+        "Should we explore possible causes of this iron level, such as diet or blood loss?"
+      ]
     }
   ]
 }

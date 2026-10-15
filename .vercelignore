@@ -1,0 +1,31 @@
+# Vercel deployment ignore file
+# Keep deployment bundle minimal and under serverless size budgets
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Tests & test caches
+tests/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Linters & tooling caches
+.ruff_cache/
+.mypy_cache/
+
+# Git & Docker
+.git/
+.github/
+Dockerfile
+.dockerignore
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Local scratch & docs
+scratch/

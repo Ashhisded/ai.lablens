@@ -195,10 +195,13 @@ class TestMainCoverage:
         """_load_env_file reads KEY=VALUE from .env if present."""
         import os
         from unittest.mock import patch
+
         from app.config import _load_env_file
 
         fake_env = tmp_path / ".env"
-        fake_env.write_text("# Comment\nCUSTOM_TEST_VAR=hello_world\nINVALID_LINE\n", encoding="utf-8")
+        fake_env.write_text(
+            "# Comment\nCUSTOM_TEST_VAR=hello_world\nINVALID_LINE\n", encoding="utf-8"
+        )
 
         with patch("app.config.Path.parent", new_callable=lambda: property(lambda self: tmp_path)):
             with patch.dict(os.environ, {}, clear=False):
@@ -232,9 +235,7 @@ class TestCachedLLMCallCoverage:
             mock_settings.return_value.gemini_model = "test-model"
             mock_response = MagicMock()
             mock_response.text = "not-json"
-            mock_client.return_value.models.generate_content.return_value = (
-                mock_response
-            )
+            mock_client.return_value.models.generate_content.return_value = mock_response
             result = _cached_llm_call("unique-key-json", "[]")
         assert result is None
 

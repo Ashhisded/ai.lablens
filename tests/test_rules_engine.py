@@ -181,6 +181,4 @@ def test_classify_normal_for_midpoint(test_id):
     if low is not None and high is not None:
         mid = (low + high) / 2
         result = classify(test_id, mid, Sex.MALE)
-        assert (
-            result == TestStatus.NORMAL
-        ), f"{test_id}: midpoint {mid} classified as {result}"
+        assert result == TestStatus.NORMAL, f"{test_id}: midpoint {mid} classified as {result}"

@@ -56,9 +56,7 @@ def test_required_test_ids_present(reference_data):
 
 def test_each_test_has_unit(reference_data):
     for test in reference_data["tests"]:
-        assert (
-            "unit" in test and test["unit"]
-        ), f"Test '{test.get('id', '?')}' missing unit"
+        assert "unit" in test and test["unit"], f"Test '{test.get('id', '?')}' missing unit"
 
 
 def test_each_test_has_required_fields(reference_data):
@@ -95,17 +93,11 @@ def test_range_ordering_is_valid(reference_data):
             test_id = test["id"]
 
             if cl is not None and lo is not None:
-                assert (
-                    cl < lo
-                ), f"{test_id}/{sex_key}: critical_low ({cl}) must be < low ({lo})"
+                assert cl < lo, f"{test_id}/{sex_key}: critical_low ({cl}) must be < low ({lo})"
             if lo is not None and hi is not None:
-                assert (
-                    lo <= hi
-                ), f"{test_id}/{sex_key}: low ({lo}) must be <= high ({hi})"
+                assert lo <= hi, f"{test_id}/{sex_key}: low ({lo}) must be <= high ({hi})"
             if hi is not None and ch is not None:
-                assert (
-                    hi < ch
-                ), f"{test_id}/{sex_key}: high ({hi}) must be < critical_high ({ch})"
+                assert hi < ch, f"{test_id}/{sex_key}: high ({hi}) must be < critical_high ({ch})"
 
 
 def test_fallback_texts_present_where_expected(reference_data):
@@ -138,6 +130,4 @@ def test_ranges_structure(reference_data):
         ranges = test.get("ranges", {})
         assert ranges, f"Test '{test['id']}' has empty ranges"
         for key in ranges:
-            assert (
-                key in valid_keys
-            ), f"Test '{test['id']}' has unexpected range key: '{key}'"
+            assert key in valid_keys, f"Test '{test['id']}' has unexpected range key: '{key}'"

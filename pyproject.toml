@@ -6,7 +6,7 @@ requires-python = ">=3.11"
 
 [tool.ruff]
 target-version = "py311"
-line-length = 88
+line-length = 100
 
 [tool.ruff.lint]
 select = [
@@ -18,21 +18,37 @@ select = [
     "S",   # flake8-bandit (security)
     "C4",  # flake8-comprehensions
     "SIM", # flake8-simplify
+    "C90", # mccabe complexity
+    "PL",  # pylint
+    "D",   # pydocstyle
 ]
 ignore = [
-    "S101", # assert used in tests — fine
-    "S311", # random — not used for crypto
+    "S101",   # assert used in tests — fine
+    "S311",   # random — not used for crypto
+    "D100",   # missing docstring in public module — covered by file-level docstrings
+    "D104",   # missing docstring in public package
+    "D203",   # one-blank-line-before-class — conflicts with D211
+    "D213",   # multi-line-summary-second-line — conflicts with D212
+    "PLR0913", # too many arguments — not applicable here
+    "PLR2004", # magic value comparison — accept in tests/data loading
+    "B008",   # function call in argument defaults — required by FastAPI Depends()
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S", "SIM", "E501", "F841", "B010"]  # Relax in tests
+"tests/*" = ["S", "SIM", "E501", "F841", "B010", "D", "PL", "C90"]  # Relax in tests
+
+[tool.ruff.lint.mccabe]
+max-complexity = 8
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = [
     "--cov=app",
     "--cov-report=term-missing",
-    "--cov-fail-under=85",
+    "--cov-fail-under=90",
     "-v",
 ]
 asyncio_mode = "auto"
@@ -41,6 +57,7 @@ asyncio_default_fixture_loop_scope = "function"
 [tool.coverage.run]
 source = ["app"]
 omit = ["app/__init__.py"]
+concurrency = ["thread"]
 
 [tool.coverage.report]
 exclude_lines = [
@@ -48,3 +65,13 @@ exclude_lines = [
     "if TYPE_CHECKING:",
     "raise NotImplementedError",
 ]
+
+[tool.mypy]
+python_version = "3.11"
+strict = false
+warn_return_any = true
+warn_unused_ignores = true
+ignore_missing_imports = true
+
+[tool.vercel]
+entrypoint = "app.main:app"

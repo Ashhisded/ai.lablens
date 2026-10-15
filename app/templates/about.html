@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}LabLens – About &amp; Clinical Methodology{% endblock %}
+
+{% block content %}
+<div class="container about-container">
+  <header class="about-header">
+    <h1 id="about-heading">About LabLens &amp; Clinical Methodology</h1>
+    <p class="about-lead">
+      LabLens was built to bridge the health literacy gap by helping patients understand their routine blood test reports
+      before and after speaking with their healthcare provider.
+    </p>
+  </header>
+
+  <!-- How the Rules Engine Works -->
+  <section class="about-section" aria-labelledby="rules-engine-heading">
+    <h2 id="rules-engine-heading">1. Deterministic Rules Engine</h2>
+    <p>
+      Clinical safety begins with total determinism. LabLens <strong>never uses artificial intelligence to classify blood values</strong>.
+      Classification is handled by a pure, rule-based Python engine that compares your exact numeric inputs against
+      reference interval thresholds loaded from a validated clinical schema.
+    </p>
+    <div class="methodology-card">
+      <h3>Classification Tiers</h3>
+      <ul>
+        <li><strong>CRITICAL LOW:</strong> Below the critical emergency threshold (immediate medical consultation needed).</li>
+        <li><strong>LOW:</strong> Below the lower reference limit for healthy adults.</li>
+        <li><strong>NORMAL:</strong> Within the typical reference interval (inclusive of boundary values).</li>
+        <li><strong>HIGH:</strong> Above the upper reference limit for healthy adults.</li>
+        <li><strong>CRITICAL HIGH:</strong> Above the critical emergency threshold (immediate medical consultation needed).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Reference Range Sources -->
+  <section class="about-section" aria-labelledby="sources-heading">
+    <h2 id="sources-heading">2. Reference Range Sources &amp; Review</h2>
+    <p>
+      Our reference ranges are curated from trusted clinical public references:
+    </p>
+    <ul>
+      <li><strong>MedlinePlus:</strong> National Library of Medicine (NIH), <a href="https://medlineplus.gov/lab-tests/" rel="noopener noreferrer" target="_blank">medlineplus.gov</a></li>
+      <li><strong>Mayo Clinic Laboratories:</strong> Clinical Reference Guide, <a href="https://www.mayocliniclabs.com" rel="noopener noreferrer" target="_blank">mayocliniclabs.com</a></li>
+    </ul>
+    <p>
+      <strong>Last Clinical Review:</strong> January 1, 2024 &bull; Version: 1.0.0
+    </p>
+  </section>
+
+  <!-- How AI is Used & Safety Guardrails -->
+  <section class="about-section" aria-labelledby="ai-safety-heading">
+    <h2 id="ai-safety-heading">3. Safe AI Explanations &amp; Guardrails</h2>
+    <p>
+      Artificial intelligence (Google Gemini Flash) is used exclusively as an educational translation layer for tests that fall outside the normal range:
+    </p>
+    <div class="guardrails-grid">
+      <div class="guardrail-item">
+        <h3>Strict System Prompting</h3>
+        <p>Enforces an 8th-grade reading level, requires hedging language ("can be associated with"), and forbids diagnosing conditions.</p>
+      </div>
+      <div class="guardrail-item">
+        <h3>Negative Blocklist Filtering</h3>
+        <p>A post-generation regex filter scans all output for prohibited phrases ("you have", "diagnosed with", medication names, dosages).</p>
+      </div>
+      <div class="guardrail-item">
+        <h3>Instant Static Fallback</h3>
+        <p>If the AI is unreachable, times out (≤ 8s budget), or generates flagged text, built-in clinical explanations are displayed seamlessly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Limitations -->
+  <section class="about-section" aria-labelledby="limitations-heading">
+    <h2 id="limitations-heading">4. Known Limitations</h2>
+    <p>
+      Please keep the following constraints in mind when using LabLens:
+    </p>
+    <ul>
+      <li><strong>Adult General Population:</strong> Ranges apply to non-pregnant adults aged 18 and older. Pediatric, geriatric, and obstetric ranges vary widely.</li>
+      <li><strong>Inter-laboratory Variance:</strong> Different commercial laboratories (e.g. Quest, Labcorp) use different analytical assays and instruments, leading to slightly different normal ranges. Always prioritize the reference interval printed on your actual report.</li>
+      <li><strong>Isolated Data Points:</strong> A single abnormal blood test value rarely tells the whole story; clinical diagnosis requires physical exam, clinical history, and symptom correlation.</li>
+    </ul>
+  </section>
+
+  <!-- Privacy -->
+  <section class="about-section" aria-labelledby="privacy-method-heading">
+    <h2 id="privacy-method-heading">5. Privacy Architecture</h2>
+    <p>
+      LabLens operates under a zero-persistence model. Submitted lab values exist only in memory during the duration of the HTTP request and are discarded immediately.
+      No health information is written to disk, stored in databases, or included in application log files.
+    </p>
+  </section>
+
+  <!-- Credits -->
+  <section class="about-section" aria-labelledby="credits-heading">
+    <h2 id="credits-heading">6. Credits &amp; Acknowledgements</h2>
+    <p>
+      LabLens is built with open-source technologies:
+    </p>
+    <ul class="credits-list">
+      <li><strong>Web Framework:</strong> FastAPI, Starlette, Uvicorn</li>
+      <li><strong>Data Validation &amp; Models:</strong> Pydantic v2</li>
+      <li><strong>Templating:</strong> Jinja2 (HTML autoescape enabled)</li>
+      <li><strong>AI &amp; LLM:</strong> Google Gemini API via official <code>google-genai</code> SDK</li>
+      <li><strong>Testing &amp; Quality:</strong> Pytest, Coverage.py, Ruff, Mypy</li>
+      <li><strong>Assisted Development:</strong> Built with AI-assisted coding using Google Antigravity</li>
+    </ul>
+  </section>
+</div>
+{% endblock %}

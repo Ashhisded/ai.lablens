@@ -20,19 +20,22 @@ class TestIndexRoute:
         response = client.get("/")
         assert response.status_code == 200
 
-    def test_index_contains_form(self, client):
+    def test_index_contains_link_to_analyze(self, client):
         response = client.get("/")
+        assert "/analyze" in response.text
+        assert "Check my lab values" in response.text
+
+    def test_analyze_page_contains_form(self, client):
+        response = client.get("/analyze")
+        assert response.status_code == 200
         assert "<form" in response.text
 
-    def test_index_has_labels_for_inputs(self, client):
+    def test_analyze_has_labels_for_inputs(self, client):
         """Every input must have an associated label (accessibility check)."""
         from bs4 import BeautifulSoup
 
-        soup = (
-            BeautifulSoup(response.text, "html.parser")
-            if (response := client.get("/"))
-            else None
-        )
+        response = client.get("/analyze")
+        soup = BeautifulSoup(response.text, "html.parser")
         inputs = soup.find_all("input", {"type": "number"})
         for inp in inputs:
             inp_id = inp.get("id")
@@ -46,10 +49,22 @@ class TestIndexRoute:
         response = client.get("/")
         soup = BeautifulSoup(response.text, "html.parser")
         h1s = soup.find_all("h1")
-        assert len(h1s) == 1, f"Expected exactly one h1, found {len(h1s)}"
+        assert len(h1s) == 1, f"Expected exactly one h1 on home, found {len(h1s)}"
+
+    def test_analyze_has_one_h1(self, client):
+        from bs4 import BeautifulSoup
+
+        response = client.get("/analyze")
+        soup = BeautifulSoup(response.text, "html.parser")
+        h1s = soup.find_all("h1")
+        assert len(h1s) == 1, f"Expected exactly one h1 on /analyze, found {len(h1s)}"
 
     def test_index_has_lang_attribute(self, client):
         response = client.get("/")
+        assert 'lang="en"' in response.text
+
+    def test_analyze_has_lang_attribute(self, client):
+        response = client.get("/analyze")
         assert 'lang="en"' in response.text
 
 
@@ -178,9 +193,7 @@ class TestApiRateLimit:
 
                 _request_log.clear()
 
-                responses = [
-                    test_client.post("/api/analyze", json=payload) for _ in range(5)
-                ]
+                responses = [test_client.post("/api/analyze", json=payload) for _ in range(5)]
                 status_codes = [r.status_code for r in responses]
                 assert 429 in status_codes
 

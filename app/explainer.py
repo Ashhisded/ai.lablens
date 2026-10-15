@@ -7,9 +7,17 @@ import json
 import logging
 import re
 from functools import lru_cache
-from typing import Protocol, runtime_checkable
+from typing import Protocol, cast, runtime_checkable
 
 from app.config import get_settings
+from app.constants import (
+    DISALLOWED_PATTERN_SOURCES,
+    GEMINI_RETRIES,
+    GEMINI_TIMEOUT,
+    LLM_SYSTEM_INSTRUCTION,
+    SOURCE_FALLBACK,
+    SOURCE_LLM,
+)
 from app.rules_engine import TestStatus, get_meta
 
 logger = logging.getLogger(__name__)
@@ -19,44 +27,16 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 # Words/phrases that must not appear in LLM output — any match triggers fallback.
-# This list is intentionally conservative.
+# Pattern sources are defined in constants.py so they can be independently tested.
 _DISALLOWED_PATTERNS: list[re.Pattern[str]] = [
-    re.compile(r"\byou have\b", re.IGNORECASE),
-    re.compile(r"\bdiagnosed with\b", re.IGNORECASE),
-    re.compile(r"\byour condition\b", re.IGNORECASE),
-    re.compile(r"\bprescribe\b", re.IGNORECASE),
-    re.compile(r"\btake \d+\s?mg\b", re.IGNORECASE),
-    re.compile(r"\b\d+\s?mg\s+(once|twice|three times)\b", re.IGNORECASE),
-    re.compile(r"\bdo not see a doctor\b", re.IGNORECASE),
-    re.compile(r"\bno need to see\b", re.IGNORECASE),
-    # Common medication names (small blocklist)
-    re.compile(
-        r"\b(metformin|insulin|aspirin|atorvastatin|lisinopril|levothyroxine"
-        r"|warfarin|ibuprofen|acetaminophen|amoxicillin)\b",
-        re.IGNORECASE,
-    ),
+    re.compile(src, re.IGNORECASE) for src in DISALLOWED_PATTERN_SOURCES
 ]
 
-_GEMINI_TIMEOUT = 8.0  # seconds
-_GEMINI_RETRIES = 1
+_GEMINI_TIMEOUT = GEMINI_TIMEOUT
+_GEMINI_RETRIES = GEMINI_RETRIES
 
 # LLM system instruction — enforces educational tone and content limits.
-_SYSTEM_INSTRUCTION = (
-    "You are a health literacy assistant. "
-    "Provide ONLY general educational information about lab tests. "
-    "Write at approximately an 8th grade reading level. "
-    "Use plain language a non-medical person can understand. "
-    "You MUST follow these rules strictly:\n"
-    "1. NEVER state a diagnosis or say the person has a disease.\n"
-    "2. NEVER recommend or name any medication, drug, or dosage.\n"
-    "3. NEVER suggest a treatment plan.\n"
-    "4. NEVER advise the person to delay or avoid seeing a doctor.\n"
-    "5. Use hedging language: 'can be associated with', "
-    "'may indicate', 'is sometimes linked to'.\n"
-    "6. End each explanation with a suggestion to discuss with a doctor.\n"
-    "7. Keep each explanation under 80 words.\n"
-    "8. Output valid JSON only, matching the requested schema."
-)
+_SYSTEM_INSTRUCTION = LLM_SYSTEM_INSTRUCTION
 
 
 # ---------------------------------------------------------------------------
@@ -95,7 +75,7 @@ class ExplanationResult:
     def __init__(self, explanations: dict[str, str], source: str) -> None:
         """Initialise with explanations and their source."""
         self.explanations = explanations
-        self.source = source  # "llm" or "fallback"
+        self.source = source  # SOURCE_LLM or SOURCE_FALLBACK
 
 
 # ---------------------------------------------------------------------------
@@ -134,7 +114,7 @@ class StaticFallbackProvider:
             flagged: List of flagged tests.
 
         Returns:
-            ExplanationResult with source='fallback'.
+            ExplanationResult with source=SOURCE_FALLBACK.
         """
         explanations: dict[str, str] = {}
         for ft in flagged:
@@ -144,14 +124,12 @@ class StaticFallbackProvider:
             else:
                 text = meta.get("fallback_high") or _generic_fallback(ft)
             explanations[ft.test_id] = text
-        return ExplanationResult(explanations=explanations, source="fallback")
+        return ExplanationResult(explanations=explanations, source=SOURCE_FALLBACK)
 
 
 def _generic_fallback(ft: FlaggedTest) -> str:
     """Generate a generic safe fallback message for a test."""
-    direction = (
-        "below" if ft.status in (TestStatus.LOW, TestStatus.CRITICAL_LOW) else "above"
-    )
+    direction = "below" if ft.status in (TestStatus.LOW, TestStatus.CRITICAL_LOW) else "above"
     return (
         f"Your {ft.display_name} value is {direction} the typical reference range. "
         "Please discuss this result with your healthcare provider."
@@ -207,11 +185,10 @@ def _cached_llm_call(cache_key: str, flagged_json: str) -> dict[str, str] | None
 
     try:
         # Import here to avoid module-level import failure when key is absent.
-        from google import genai  # type: ignore[import-untyped]
-        from google.genai import types  # type: ignore[import-untyped]
+        from google import genai
+        from google.genai import types
 
-        client_options = {"api" + "_key": settings.gemini_api_key}
-        client = genai.Client(**client_options)
+        client = genai.Client(api_key=settings.gemini_api_key)
 
         prompt = (
             "Below is a JSON list of flagged lab test results. "
@@ -237,7 +214,7 @@ def _cached_llm_call(cache_key: str, flagged_json: str) -> dict[str, str] | None
         if not isinstance(parsed, dict):
             logger.warning("LLM returned non-dict JSON; falling back.")
             return None
-        return parsed  # type: ignore[return-value]
+        return cast(dict[str, str], parsed)
 
     except json.JSONDecodeError:
         logger.warning("LLM returned malformed JSON; falling back.")
@@ -269,10 +246,10 @@ class GeminiProvider:
             flagged: List of flagged tests needing explanation.
 
         Returns:
-            ExplanationResult with source='llm' or source='fallback'.
+            ExplanationResult with source=SOURCE_LLM or source=SOURCE_FALLBACK.
         """
         if not flagged:
-            return ExplanationResult(explanations={}, source="fallback")
+            return ExplanationResult(explanations={}, source=SOURCE_FALLBACK)
 
         cache_key = _cache_key(flagged)
         flagged_data = [
@@ -299,31 +276,27 @@ class GeminiProvider:
         for ft in flagged:
             text = raw.get(ft.test_id)
             if not isinstance(text, str) or not text.strip():
-                logger.warning(
-                    "LLM missing explanation for %s; using fallback.", ft.test_id
-                )
+                logger.warning("LLM missing explanation for %s; using fallback.", ft.test_id)
                 explanations[ft.test_id] = fallback_result.explanations[ft.test_id]
                 continue
             if _contains_disallowed(text):
                 logger.warning(
-                    "LLM explanation for %s contains disallowed content; "
-                    "using fallback.",
+                    "LLM explanation for %s contains disallowed content; " "using fallback.",
                     ft.test_id,
                 )
                 explanations[ft.test_id] = fallback_result.explanations[ft.test_id]
                 continue
             explanations[ft.test_id] = text.strip()
 
-        # Determine source: llm if at least one explanation came from the API.
+        # Determine source: SOURCE_LLM if at least one explanation came from the API.
         source = (
-            "llm"
+            SOURCE_LLM
             if any(
-                explanations.get(ft.test_id)
-                != fallback_result.explanations.get(ft.test_id)
+                explanations.get(ft.test_id) != fallback_result.explanations.get(ft.test_id)
                 for ft in flagged
                 if ft.test_id in fallback_result.explanations
             )
-            else "fallback"
+            else SOURCE_FALLBACK
         )
         return ExplanationResult(explanations=explanations, source=source)
 
