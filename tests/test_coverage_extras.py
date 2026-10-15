@@ -191,6 +191,20 @@ class TestMainCoverage:
             s = Settings()
             assert s.cors_origins == []
 
+    def test_load_env_file_reads_values(self, tmp_path):
+        """_load_env_file reads KEY=VALUE from .env if present."""
+        import os
+        from unittest.mock import patch
+        from app.config import _load_env_file
+
+        fake_env = tmp_path / ".env"
+        fake_env.write_text("# Comment\nCUSTOM_TEST_VAR=hello_world\nINVALID_LINE\n", encoding="utf-8")
+
+        with patch("app.config.Path.parent", new_callable=lambda: property(lambda self: tmp_path)):
+            with patch.dict(os.environ, {}, clear=False):
+                _load_env_file()
+                assert os.environ.get("CUSTOM_TEST_VAR") == "hello_world"
+
 
 class TestCachedLLMCallCoverage:
     """Tests for _cached_llm_call internals."""

@@ -4,6 +4,18 @@ from __future__ import annotations
 
 import os
 from functools import lru_cache
+from pathlib import Path
+
+
+def _load_env_file() -> None:
+    """Load key-value pairs from .env into os.environ if present."""
+    env_file = Path(__file__).resolve().parent.parent / ".env"
+    if env_file.is_file():
+        for raw_line in env_file.read_text(encoding="utf-8").splitlines():
+            line = raw_line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                key, val = line.split("=", 1)
+                os.environ.setdefault(key.strip(), val.strip().strip("'\""))
 
 
 class Settings:
@@ -15,6 +27,7 @@ class Settings:
 
     def __init__(self) -> None:
         """Load settings from environment."""
+        _load_env_file()
         self.gemini_api_key: str | None = os.environ.get("GEMINI_API_KEY")
         # Default to a current, fast Gemini Flash model.
         self.gemini_model: str = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash")
